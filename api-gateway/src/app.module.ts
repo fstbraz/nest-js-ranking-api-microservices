@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
+import { CategoriesModule } from './categories/categories.module';
+import { PlayersModule } from './players/players.module';
+import { ClientProxyRankingAPI } from './proxyrmq/client-proxy';
+import { ProxyRMQModule } from './proxyrmq/proxyrmq.module';
 
 @Module({
   imports: [
@@ -8,8 +11,10 @@ import { AppController } from './app.controller';
       envFilePath: '.development.env',
       isGlobal: true,
     }),
+    ProxyRMQModule,
+    PlayersModule,
+    CategoriesModule,
   ],
-  controllers: [AppController],
-  providers: [],
+  providers: [ClientProxyRankingAPI],
 })
 export class AppModule {}

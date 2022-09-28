@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
   Param,
   Post,
   Put,
@@ -10,44 +9,32 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import {
-  ClientProxy,
-  ClientProxyFactory,
-  Transport,
-} from '@nestjs/microservices';
 import { Observable } from 'rxjs';
+import { ClientProxyRankingAPI } from '../proxyrmq/client-proxy';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 
-@Controller('api/v1')
-export class AppController {
-  private logger = new Logger(AppController.name);
-  private clientAdminBackend: ClientProxy;
+@Controller('api/v1/categories')
+export class CategoriesController {
+  constructor(private clientProxyRankingAPI: ClientProxyRankingAPI) {}
 
-  constructor() {
-    this.clientAdminBackend = ClientProxyFactory.create({
-      transport: Transport.RMQ,
-      options: {
-        urls: [process.env.ADMIN_BE_QUEUE_URL],
-        queue: process.env.ADMIN_BE_QUEUE,
-      },
-    });
-  }
+  private clientAdminBackend =
+    this.clientProxyRankingAPI.getClientProxyAdminBackendInstance();
 
-  @Post('categories')
+  @Post()
   @UsePipes(ValidationPipe)
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     this.clientAdminBackend.emit('create-category', createCategoryDto);
   }
 
-  @Get('categories')
-  listCategories(@Query('categoryId') _id: string): Observable<any> {
+  @Get()
+  listCategories(@Query('idCategory') _id: string): Observable<any> {
     return this.clientAdminBackend.send('list-categories', _id ? _id : '');
   }
 
-  @Put('categories/:_id')
+  @Put('/:_id')
   @UsePipes(ValidationPipe)
-  async updateCategory(
+  updateCategory(
     @Body() updateCategoryDto: UpdateCategoryDto,
     @Param('_id') _id: string,
   ) {
