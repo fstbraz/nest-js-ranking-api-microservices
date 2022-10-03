@@ -9,27 +9,23 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { ClientProxyRankingAPI } from '../proxyrmq/client-proxy';
+import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 
 @Controller('api/v1/categories')
 export class CategoriesController {
-  constructor(private clientProxyRankingAPI: ClientProxyRankingAPI) {}
-
-  private clientAdminBackend =
-    this.clientProxyRankingAPI.getClientProxyAdminBackendInstance();
+  constructor(private categoriesService: CategoriesService) {}
 
   @Post()
   @UsePipes(ValidationPipe)
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    this.clientAdminBackend.emit('create-category', createCategoryDto);
+    this.categoriesService.createCategory(createCategoryDto);
   }
 
   @Get()
-  listCategories(@Query('idCategory') _id: string): Observable<any> {
-    return this.clientAdminBackend.send('list-categories', _id ? _id : '');
+  async listCategories(@Query('idCategory') _id: string) {
+    return await this.categoriesService.listCategories(_id);
   }
 
   @Put('/:_id')
@@ -38,9 +34,6 @@ export class CategoriesController {
     @Body() updateCategoryDto: UpdateCategoryDto,
     @Param('_id') _id: string,
   ) {
-    this.clientAdminBackend.emit('update-category', {
-      id: _id,
-      category: updateCategoryDto,
-    });
+    this.categoriesService.updateCategory(updateCategoryDto, _id);
   }
 }

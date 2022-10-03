@@ -10,8 +10,28 @@ export class ClientProxyRankingAPI {
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: [process.env.ADMIN_BE_QUEUE_URL],
+        urls: [process.env.RABBIT_MQ_URL],
         queue: process.env.ADMIN_BE_QUEUE,
+      },
+    });
+  }
+
+  getClientProxyChallengesInstance(): ClientProxy {
+    return ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBIT_MQ_URL],
+        queue: process.env.CHALLENGES_QUEUE,
+      },
+    });
+  }
+
+  getClientProxyRankingsInstance(): ClientProxy {
+    return ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBIT_MQ_URL],
+        queue: process.env.RANKINGS_QUEUE,
       },
     });
   }
