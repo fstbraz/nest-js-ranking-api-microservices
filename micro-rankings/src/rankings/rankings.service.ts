@@ -33,7 +33,7 @@ export class RankingsService {
   async processMatch(idMatch: string, match: Match): Promise<void> {
     try {
       const category: Category = await lastValueFrom(
-        this.clientAdminBackend.send('list-category', match.category),
+        this.clientAdminBackend.send('list-categories', match.category),
       );
 
       await Promise.all(
@@ -88,7 +88,7 @@ export class RankingsService {
         .exec();
 
       const challenges: Challenge[] = await lastValueFrom(
-        this.clientChallenges.send('list-realized-challenges', {
+        this.clientChallenges.send('list-done-challenges', {
           idCategory,
           dataRef,
         }),
