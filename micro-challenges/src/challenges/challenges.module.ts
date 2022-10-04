@@ -10,7 +10,6 @@ import { ChallengeSchema } from './interfaces/challenge.schema';
     MongooseModule.forFeature([{ name: 'Challenge', schema: ChallengeSchema }]),
     ProxyRMQModule,
   ],
-
   controllers: [ChallengesController],
   providers: [ChallengesService],
 })

@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { ProxyRMQModule } from './../proxyrmq/proxyrmq.module';
 import { RankingsController } from './rankings.controller';
 import { RankingsService } from './rankings.service';
 
 @Module({
+  imports: [ProxyRMQModule],
   controllers: [RankingsController],
   providers: [RankingsService],
 })
