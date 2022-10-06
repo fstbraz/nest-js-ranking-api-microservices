@@ -111,7 +111,7 @@ export class ChallengesService {
     this.logger.log(`challenge: ${JSON.stringify(challenge)}`);
 
     if (!challenge) {
-      throw new BadRequestException(`Desafio não cadastrado!`);
+      throw new BadRequestException(`Challenge not registered!`);
     }
 
     if (challenge.status != ChallengeStatus.PENDING) {
@@ -120,7 +120,7 @@ export class ChallengesService {
 
     await this.clientChallenges.emit('update-challenge', {
       id: _id,
-      desafio: updateChallengeDto,
+      challenge: updateChallengeDto,
     });
   }
 

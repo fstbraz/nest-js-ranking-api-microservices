@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { lastValueFrom } from 'rxjs';
 import { ClientProxyRankingAPI } from '../proxyrmq/client-proxy';
 import { ChallengeStatus } from './interfaces/challenge-status.enum';
 import { Challenge } from './interfaces/challenge.interface';
@@ -27,11 +26,11 @@ export class ChallengesService {
       createdChallenge.status = ChallengeStatus.PENDING;
       this.logger.log(`createdChallenge: ${JSON.stringify(createdChallenge)}`);
 
-      await createdChallenge.save();
+      return await createdChallenge.save();
 
-      return await lastValueFrom(
-        this.clientNotifications.emit('new-challenge-notification', challenge),
-      );
+      // return await lastValueFrom(
+      //   this.clientNotifications.emit('new-challenge-notification', challenge),
+      // );
     } catch (error) {
       this.logger.error(`error: ${JSON.stringify(error.message)}`);
       throw new RpcException(error.message);
