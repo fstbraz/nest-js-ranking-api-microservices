@@ -8,7 +8,7 @@ async function bootstrap() {
     options: {
       urls: [process.env.RABBIT_MQ_URL],
       noAck: false,
-      queue: process.env.RANKINGS_QUEUE,
+      queue: process.env.NOTIFICATIONS_QUEUE,
     },
   });
 
