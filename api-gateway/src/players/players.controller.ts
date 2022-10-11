@@ -8,12 +8,16 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
 import { ParametersValidationPipe } from '../common/pipes/parameters-validation.pipe';
 import { CreatePlayerDto } from './dtos/create-player.dto';
 import { UpdatePlayerDto } from './dtos/update-player.dto';
@@ -39,8 +43,10 @@ export class PlayersController {
     return await this.playersService.uploadFile(file, _id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
-  async listPlayers(@Query('idPlayer') _id: string) {
+  async listPlayers(@Req() req: Request, @Query('idPlayer') _id: string) {
+    this.logger.log(`req: ${JSON.stringify(req.user)}`);
     return await this.playersService.listPlayers(_id);
   }
 

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
+import { AwsS3Service } from '../aws/aws-s3.service';
 import { ClientProxyRankingAPI } from '../proxyrmq/client-proxy';
-import { AwsService } from './../aws/aws.service';
 import { Category } from './../categories/interfaces/category';
 import { CreatePlayerDto } from './dtos/create-player.dto';
 import { UpdatePlayerDto } from './dtos/update-player.dto';
@@ -13,7 +13,7 @@ export class PlayersService {
 
   constructor(
     private clientProxyRankingAPI: ClientProxyRankingAPI,
-    private awsService: AwsService,
+    private awsS3Service: AwsS3Service,
   ) {}
 
   private clientAdminBackend =
@@ -42,7 +42,7 @@ export class PlayersService {
       throw new BadRequestException(`Player not found!`);
     }
 
-    const urlFotoJogador: { url: '' } = await this.awsService.uploadFile(
+    const urlFotoJogador: { url: string } = await this.awsS3Service.uploadFile(
       file,
       _id,
     );

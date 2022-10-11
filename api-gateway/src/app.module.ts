@@ -7,6 +7,7 @@ import { ProxyRMQModule } from './proxyrmq/proxyrmq.module';
 import { AwsModule } from './aws/aws.module';
 import { ChallengesModule } from './challenges/challenges.module';
 import { RankingsModule } from './rankings/rankings.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RankingsModule } from './rankings/rankings.module';
     AwsModule,
     ChallengesModule,
     RankingsModule,
+    AuthModule,
   ],
   providers: [ClientProxyRankingAPI],
 })
