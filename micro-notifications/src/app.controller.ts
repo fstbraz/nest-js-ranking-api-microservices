@@ -32,7 +32,10 @@ export class AppController {
 
       if (filterAckError.length > 0) {
         await channel.ack(originalMsg);
+        return;
       }
+
+      await channel.nack(originalMsg);
     }
   }
 }
